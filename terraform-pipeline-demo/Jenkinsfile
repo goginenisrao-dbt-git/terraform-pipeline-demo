@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+    
+    tools {
+        // This matches the name you gave Terraform in Jenkins Tools
+        terraform 'terraform' 
+    }
+
+    stages {
+        stage('Git Checkout') {
+            steps {
+                // Clones your GitHub repository code
+                checkout scm
+            }
+        }
+
+        stage('Terraform Init') {
+            steps {
+                // Initializes Terraform and downloads providers
+                sh 'terraform init'
+            }
+        }
+
+        stage('Terraform Plan') {
+            steps {
+                // Previews what changes Terraform will make
+                sh 'terraform plan'
+            }
+        }
+
+        stage('Terraform Apply') {
+            steps {
+                // Executes and deploys the infrastructure changes
+                sh 'terraform apply -auto-approve'
+            }
+        }
+    }
+}
